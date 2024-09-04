@@ -40,14 +40,17 @@ RUN apt -y update && useradd -m -s /bin/bash 10001
 # Set the working directory
 WORKDIR /app
 
+# Ensure required directories exist
+RUN mkdir -p app && mkdir -p app/cache
+
+RUN chown -R 10001:10001 /app
+
 # Switch to the non-root user
 USER 10001
 
 # Copy the build from the builder stage
 COPY --from=builder /go/src/GIG/build .
 
-# Ensure required directories exist
-RUN mkdir -p app && mkdir app/cache
 
 # Run the application
 ENTRYPOINT ["app/run.sh"]
