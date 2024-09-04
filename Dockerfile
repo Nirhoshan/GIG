@@ -47,7 +47,7 @@ USER 10001
 COPY --from=builder /go/src/GIG/build .
 
 # Ensure required directories exist
-RUN mkdir app && mkdir app/cache
+RUN mkdir -p app && mkdir app/cache
 
 # Run the application
 ENTRYPOINT ["app/run.sh"]
