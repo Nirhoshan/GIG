@@ -15,8 +15,10 @@ ADD go.mod go.sum ./
 RUN go mod download
 
 # Install Revel and other dependencies
-RUN go install github.com/revel/cmd/revel@latest \
-    && go install github.com/lsflk/gig-sdk@latest
+RUN go get -u github.com/revel/revel
+RUN go get -u github.com/revel/cmd/revel
+RUN go install github.com/revel/cmd/revel@latest
+RUN go get -u github.com/lsflk/gig-sdk
 
 # Ensure the Go bin directory is in the PATH
 ENV PATH=$PATH:/go/bin
