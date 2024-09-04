@@ -25,8 +25,8 @@ EXPOSE 9000
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt -y update
 WORKDIR /app
-RUN useradd -m -s /bin/bash appuser
-USER appuser
+RUN useradd -m -s /bin/bash 10001
+USER 10001
 COPY --from=builder /go/src/GIG/build .
 RUN mkdir app && mkdir app/cache
 ENTRYPOINT /app/run.sh
