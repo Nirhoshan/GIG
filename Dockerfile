@@ -51,6 +51,7 @@ USER 10001
 # Copy the build from the builder stage
 COPY --from=builder /go/src/GIG/build .
 
+COPY .trivyignore /app/
 
 # Run the application
 ENTRYPOINT ["app/run.sh"]
