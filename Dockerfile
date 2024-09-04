@@ -33,13 +33,13 @@ EXPOSE 9000
 
 # Add non-root user
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt -y update && useradd -m -s /bin/bash appuser
+RUN apt -y update && useradd -m -s /bin/bash 10001
 
 # Set the working directory
 WORKDIR /app
 
 # Switch to the non-root user
-USER appuser
+USER 10001
 
 # Copy the build from the builder stage
 COPY --from=builder /go/src/GIG/build .
