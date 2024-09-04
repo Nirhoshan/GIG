@@ -10,7 +10,7 @@ RUN go mod download
 
 RUN go get -u github.com/revel/revel
 RUN go get -u github.com/revel/cmd/revel
-RUN go install github.com/revel/cmd/revel
+RUN go get -u github.com/revel/cmd/revel
 RUN go get -u github.com/lsflk/gig-sdk
 
 ENV CGO_ENABLED 0 \
