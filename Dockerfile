@@ -25,14 +25,17 @@ RUN revel build "" build -m dev
 FROM golang:1.18.1
 EXPOSE 9000
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt -y update
+RUN apt -y update && useradd -m -s /bin/bash 10001
 
-RUN adduser -D -u 10014 choreouser
-USER 10014
 
 WORKDIR /app
 COPY --from=builder /go/src/GIG/build .
-RUN mkdir app && mkdir app/cache
+RUN mkdir -p app && mkdir -p app/cache
 RUN chmod +x /app/run.sh
+
+RUN chown -R 10001:10001 /app
+
+# Switch to the non-root user
+USER 10001
 
 ENTRYPOINT ["/app/run.sh"]
