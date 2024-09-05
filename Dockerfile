@@ -5,53 +5,34 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Add required packages
 RUN apt -y update && apt -y install git curl bash
 
-# Set the working directory inside the container
 WORKDIR /go/src/GIG
 
-# Copy go.mod and go.sum to the working directory
 ADD go.mod go.sum ./
-
-# Download Go modules
 RUN go mod download
 
-# Install Revel and other dependencies
 RUN go get -u github.com/revel/revel
 RUN go get -u github.com/revel/cmd/revel
 RUN go install github.com/revel/cmd/revel@latest
 RUN go get -u github.com/lsflk/gig-sdk
 
-# Ensure the Go bin directory is in the PATH
-ENV PATH=$PATH:/go/bin
-
-# Copy the entire project to the working directory
+ENV CGO_ENABLED 0 \
+    GOOS=linux \
+    GOARCH=amd64
 ADD . .
-
-# Build the application
-RUN revel build . /go/src/GIG/build -m prod
+RUN revel build "" build -m dev
 
 # Run stage
 FROM golang:1.18.1
 EXPOSE 9000
-
-# Add non-root user
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt -y update && useradd -m -s /bin/bash 10001
+RUN apt -y update
 
-# Set the working directory
+RUN adduser -D -u 10014 choreouser
+USER 10014
+
 WORKDIR /app
-
-# Ensure required directories exist
-RUN mkdir -p app && mkdir -p app/cache
-
-RUN chown -R 10001:10001 /app
-
-# Switch to the non-root user
-USER 10001
-
-# Copy the build from the builder stage
 COPY --from=builder /go/src/GIG/build .
+RUN mkdir app && mkdir app/cache
+RUN chmod +x /app/run.sh
 
-COPY .trivyignore /app/
-
-# Run the application
-ENTRYPOINT ["app/run.sh"]
+ENTRYPOINT ["/app/run.sh"]
