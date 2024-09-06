@@ -14,7 +14,7 @@ spec:
       # Accepted values: Project|Organization|Public.
       networkVisibility: Public
       # Context (base path) of the API that gets exposed via the endpoint.
-      context: /api
+      context: /
       # The path to the schema definition file. Defaults to wildcard route if not specified.
       # The path should be relative to the Docker context.
       schemaFilePath: docs/swagger.yaml
