@@ -817,6 +817,46 @@ paths:
       summary: Upload File
       tags:
       - File
+  /api/graph:
+    get:
+      description: This API returns graph data for visualization.
+      operationId: GetGraph
+      summary: Get the graph data
+      tags:
+      - Graph
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: graph data returned successfully
+          schema:
+            type: object
+            additionalProperties:
+              type: object
+              additionalProperties:
+                type: integer
+        "500":
+          description: server error
+          schema:
+            "$ref": "#/definitions/Response"
+  /api/status:
+    get:
+      description: This API returns statistics of the entities in the system, including various aggregated data.
+      operationId: GetStats
+      summary: Get stats
+      tags:
+      - Dashboard
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: statistics retrieved successfully
+          schema:
+            "$ref": "#/definitions/Response"
+        "500":
+          description: server error
+          schema:
+            "$ref": "#/definitions/Response"
   /api/user/add:
     post:
       description: This API allows to create/ modify a new/ existing user

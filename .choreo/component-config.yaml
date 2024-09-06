@@ -17,4 +17,4 @@ spec:
       context: /
       # The path to the schema definition file. Defaults to wildcard route if not specified.
       # The path should be relative to the Docker context.
-      schemaFilePath: openapi.yaml
+      schemaFilePath: docs/swagger.yaml
