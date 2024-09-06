@@ -359,7 +359,7 @@ paths:
       - description: date to search the title for eg. 2006-01-02
         in: query
         name: date
-        type: date
+        type: string
       - collectionFormat: csv
         description: list of attributes to filter/ return all attributes if not provided
         in: query
