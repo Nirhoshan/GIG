@@ -31,12 +31,13 @@ RUN apt -y update && useradd -m -s /bin/bash 10001
 WORKDIR /app
 COPY --from=builder /go/src/GIG/build .
 RUN mkdir -p app && mkdir -p app/cache
-COPY config-loader.sh /app/config-loader.sh
-RUN chmod +x /app/run.sh /app/config-loader.sh
+# COPY config-loader.sh /app/config-loader.sh
+# RUN chmod +x /app/config-loader.sh
+RUN chmod +x /app/run.sh
 
 RUN chown -R 10001:10001 /app
 
 # Switch to the non-root user
 USER 10001
 
-ENTRYPOINT ["/app/config-loader.sh"]
+ENTRYPOINT ["/app/run.sh"]

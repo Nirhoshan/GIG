@@ -40,6 +40,7 @@ import (
 	"github.com/revel/revel"
 	"log"
 	"net/http"
+	"os"
 )
 
 var (
@@ -100,7 +101,11 @@ func init() {
 	if err != nil || Config == nil {
 		log.Fatalf("%+v", err)
 	}
-
+	revel.OnAppStart(func() {
+        if mongoPath := os.Getenv("MONGO_PATH"); mongoPath != "" {
+            revel.Config.SetOption("mongo.path", mongoPath)
+        }
+    })
 	revel.OnAppStart(databases.LoadDatabaseHandler)
 	revel.OnAppStart(storages.LoadStorageHandler)
 	revel.OnAppStart(normalizers.LoadNormalizers)
