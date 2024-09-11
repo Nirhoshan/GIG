@@ -50,9 +50,13 @@ func Authenticate(c *revel.Controller) revel.Result {
 }
 
 func GetAuthUser(header *revel.RevelHeader) (models.User, string, error) {
+	log.Println("Request Headers:")
+    for key, values := range header.GetAll() {
+        log.Printf("%s: %v", key, values)
+    }
 	tokenString, err := getTokenString(header, AuthHeaderName)
 	apiKey, keyErr := getTokenString(header, ApiKeyHeaderName)
-
+	log.Println("keyErr", keyErr)
 	if keyErr == nil { // if ApiKey exist
 		log.Println("ApiKey found")
 		user, userErr := repositories.UserRepository{}.GetUserBy(ApiKey, apiKey)
