@@ -6,13 +6,14 @@ import (
 	"GIG/app/constants/user_roles"
 	"GIG/app/repositories"
 	"fmt"
+	"log"
+	"net/http"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/lsflk/gig-sdk/libraries"
 	"github.com/lsflk/gig-sdk/models"
 	"github.com/pkg/errors"
 	"github.com/revel/revel"
-	"log"
-	"net/http"
 )
 
 // Authenticate is and method will be called before any authenticate needed action.
@@ -22,6 +23,7 @@ func Authenticate(c *revel.Controller) revel.Result {
 	user, authMethod, err := GetAuthUser(c.Request.Header)
 
 	if err != nil {
+		log.Println("Failed to authenticate user")
 		c.Response.Status = http.StatusBadRequest
 		return c.RenderJSON(err.Error())
 	}
@@ -30,7 +32,7 @@ func Authenticate(c *revel.Controller) revel.Result {
 	if authMethod == ApiKey && !libraries.StringInSlice(AdminControllers, c.Name) {
 		return nil
 	}
-
+	log.Println("Paasing ApiKey validation and failed")
 	if err != nil { // if Bearer token doesn't exist
 		log.Println(error_messages.TokenApiKeyFailed)
 		c.Response.Status = http.StatusBadRequest
@@ -52,7 +54,9 @@ func GetAuthUser(header *revel.RevelHeader) (models.User, string, error) {
 	apiKey, keyErr := getTokenString(header, ApiKeyHeaderName)
 
 	if keyErr == nil { // if ApiKey exist
+		log.Println("ApiKey found")
 		user, userErr := repositories.UserRepository{}.GetUserBy(ApiKey, apiKey)
+		log.Println(user)
 		if userErr == nil {
 			return user, ApiKey, nil
 		}
