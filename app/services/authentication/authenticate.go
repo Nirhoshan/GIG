@@ -58,7 +58,6 @@ func GetAuthUser(header *revel.RevelHeader) (models.User, string, error) {
     }
 	tokenString, err := getTokenString(header, AuthHeaderName)
 	apiKey, keyErr := getTokenString(header, ApiKeyHeaderName)
-	log.Println("keyErr", keyErr)
 	if keyErr == nil { // if ApiKey exist
 		log.Println("ApiKey found")
 		user, userErr := repositories.UserRepository{}.GetUserBy(ApiKey, apiKey)
@@ -67,7 +66,7 @@ func GetAuthUser(header *revel.RevelHeader) (models.User, string, error) {
 			return user, ApiKey, nil
 		}
 	}
-
+	log.Println("Got key error")
 	if err != nil { // if Bearer token doesn't exist
 		return models.User{}, Bearer, errors.New(error_messages.TokenApiKeyFailed)
 	}
