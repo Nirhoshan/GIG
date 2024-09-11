@@ -51,7 +51,9 @@ func Authenticate(c *revel.Controller) revel.Result {
 
 func GetAuthUser(header *revel.RevelHeader) (models.User, string, error) {
 	log.Println("Request Headers:")
-    for key, values := range header.GetAll() {
+    log.Println(header.Server.GetKeys())
+    for _, key := range header.Server.GetKeys() {
+        values := header.Get(key)
         log.Printf("%s: %v", key, values)
     }
 	tokenString, err := getTokenString(header, AuthHeaderName)
